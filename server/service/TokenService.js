@@ -13,6 +13,39 @@ class TokenService {
     saveRefreshToken (user_id, refreshToken) {
         return UserModel.findByIdAndUpdate(user_id, {refreshToken})
     }
+
+
+    removeRefreshToken (user_id) {
+        return UserModel.findByIdAndUpdate(user_id, {refreshToken: ''})
+    }
+
+    removeAccessToken (user_id) {
+        return UserModel.findByIdAndUpdate(user_id, {accessToken: ''})
+    }
+
+    validateRefreshToken (token) {
+        try {
+            const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+            return userData;
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
+    findUserByRefreshToken (refreshToken) {
+        return UserModel.findOne({refreshToken}, '_id')
+    }
+
+    validateAccessToken (token) {
+        try {
+            const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+            return userData;
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
 }
 
 module.exports = new TokenService();
