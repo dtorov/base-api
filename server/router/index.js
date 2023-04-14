@@ -1,10 +1,18 @@
-const Router = require('express').Router
-const userController = require('../controllers/UserController')
+const Router = require('express').Router;
+// скелет
+const skeletonController = require('../controllers/SkeletonController');
+// работа с пользователями
+const userController = require('../controllers/UserController');
+
 const router = new Router();
 const {body} = require('express-validator');
 const authMiddleware = require('../middlewares/AuthMiddleware');
 
 
+// скелет
+router.post('/skeleton', skeletonController.postTestData);
+router.get('/skeleton', skeletonController.getTestData);
+// работа с пользователями
 router.post('/registration',
     body('email').isEmail(),
     body('username').isLength({ min: 3 }),
